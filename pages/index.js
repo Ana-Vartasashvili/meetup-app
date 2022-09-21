@@ -1,32 +1,31 @@
 import MeetupList from "../components/meetups/MeetupList";
-
-const MEETUPS = [
-  {
-    id: "m1",
-    title: "A First Meetup",
-    image:
-      "https://lp-cms-production.imgix.net/image_browser/Abanotubani-sulfur-baths-tbilisi.jpg?auto=format&q=40&ar=16%3A9&fit=crop&w=1946",
-    address: "Georgia, Tbilisi",
-    description: "First meetup",
-  },
-  {
-    id: "m2",
-    title: "A Second Meetup",
-    image:
-      "https://lp-cms-production.imgix.net/image_browser/Abanotubani-sulfur-baths-tbilisi.jpg?auto=format&q=40&ar=16%3A9&fit=crop&w=1946",
-    address: "Georgia, Tbilisi",
-    description: "Second meetup",
-  },
-];
+import { MongoClient } from "mongodb";
 
 const HomePage = (props) => {
   return <MeetupList meetups={props.meetups} />;
 };
 
 export async function getStaticProps() {
+  const client = await MongoClient.connect(
+    "mongodb+srv://ANA_:EOrzId6XZlzePd0G@cluster0.akzpsar.mongodb.net/meetups?retryWrites=true&w=majority"
+  );
+
+  const db = client.db();
+
+  const meetupsCollection = db.collection("meetups");
+
+  const meetups = await meetupsCollection.find().toArray();
+
+  client.close();
+
   return {
     props: {
-      meetups: MEETUPS,
+      meetups: meetups.map((meetup) => ({
+        title: meetup.title,
+        address: meetup.address,
+        image: meetup.image,
+        id: meetup._id.toString(),
+      })),
     },
     revalidate: 1,
   };

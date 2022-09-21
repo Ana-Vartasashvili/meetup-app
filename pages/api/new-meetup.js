@@ -9,8 +9,6 @@ async function handler(req, res) {
       "mongodb+srv://ANA_:EOrzId6XZlzePd0G@cluster0.akzpsar.mongodb.net/meetups?retryWrites=true&w=majority"
     );
 
-    // EOrzId6XZlzePd0G
-
     const db = client.db();
 
     const meetupsCollection = db.collection("meetups");
