@@ -11,4 +11,41 @@ const MeetupDetails = () => {
   );
 };
 
+export async function getStaticPaths() {
+  return {
+    fallback: false,
+    paths: [
+      {
+        params: {
+          meetupId: "m1",
+        },
+      },
+      {
+        params: {
+          meetupId: "m2",
+        },
+      },
+    ],
+  };
+}
+
+export async function getStaticProps(context) {
+  const meetupId = context.params.meetupId;
+
+  console.log(meetupId);
+
+  return {
+    props: {
+      meetupData: {
+        image:
+          "https://lp-cms-production.imgix.net/image_browser/Abanotubani-sulfur-baths-tbilisi.jpg?auto=format&q=40&ar=16%3A9&fit=crop&w=1946",
+        id: meetupId,
+        title: "First meetup",
+        address: "Abashidze 5",
+        description: "The first meetup",
+      },
+    },
+  };
+}
+
 export default MeetupDetails;
